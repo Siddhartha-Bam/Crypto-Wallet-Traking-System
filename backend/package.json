@@ -1,0 +1,45 @@
+{
+  "name": "crypto-trace-backend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Backend API for the Real-Time Crypto Fraud Attribution System (SIH 26183)",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "tsx prisma/seed/attribution.seed.ts",
+    "db:deploy": "prisma migrate deploy",
+    "db:studio": "prisma studio"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^4.22.2",
+    "express-rate-limit": "^8.6.2",
+    "helmet": "^8.3.0",
+    "js-sha3": "^0.13.0",
+    "pino": "^10.3.1",
+    "pino-http": "^11.0.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^4.17.25",
+    "@types/node": "^26.3.0",
+    "@types/supertest": "^7.2.1",
+    "prisma": "^6.12.0",
+    "supertest": "^7.2.2",
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.11"
+  }
+}

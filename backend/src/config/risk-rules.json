@@ -1,0 +1,65 @@
+{
+  "bands": {
+    "lowUpper": 29,
+    "mediumUpper": 59,
+    "highUpper": 79
+  },
+  "rules": {
+    "rapid_movement": {
+      "enabled": true,
+      "score": 20,
+      "severity": "medium",
+      "maxMedianHoldHours": 24,
+      "minInflowEth": 0.05
+    },
+    "high_volume_pass_through": {
+      "enabled": true,
+      "score": 30,
+      "severity": "high",
+      "minForwardRatio": 0.8,
+      "maxForwardRatio": 1.2,
+      "minOutflowEth": 0.1
+    },
+    "fan_out": {
+      "enabled": true,
+      "score": 15,
+      "severity": "low",
+      "minCounterparties": 10
+    },
+    "fan_in": {
+      "enabled": true,
+      "score": 15,
+      "severity": "low",
+      "minCounterparties": 15
+    },
+    "peel_chain": {
+      "enabled": true,
+      "score": 15,
+      "severity": "low",
+      "minSequentialTransfers": 5,
+      "similarityRatioMin": 0.3
+    },
+    "layering": {
+      "enabled": true,
+      "score": 25,
+      "severity": "high",
+      "minIntermediaryDepth": 2
+    },
+    "exchange_exposure": {
+      "enabled": true,
+      "score": 20,
+      "severity": "medium"
+    },
+    "mixer_exposure": {
+      "enabled": true,
+      "score": 40,
+      "severity": "high"
+    },
+    "cross_chain_exposure": {
+      "enabled": true,
+      "score": 15,
+      "severity": "low"
+    }
+  }
+}
+

@@ -1,0 +1,120 @@
+// Real-Time Crypto Fraud Attribution System — database schema
+// PostgreSQL primary datastore. Access is exclusively via Prisma (parameterized).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// An investigation run against one suspect wallet on one chain.
+model Investigation {
+  id             String     @id @default(cuid())
+  caseId         String? // optional external case reference (e.g. NCRP ack number) — never personal data
+  chain          String // e.g. "ethereum"
+  suspectAddress String
+  /// live = real blockchain data | demo = seeded synthetic data, never mixed
+  mode           String     @default("live")
+  status         String     @default("pending") // pending | running | completed | failed
+  incidentType   String?
+  victimAmount   String? // decimal string to avoid float issues
+  victimCurrency String?
+  riskScore      Int?
+  /// low | medium | high | critical (derived band of riskScore)
+  riskBand       String?
+  summary        Json? // wallet snapshot + pipeline result summary at completion
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  completedAt    DateTime?
+
+  indicators    RiskIndicator[]
+  graphSnapshot GraphSnapshot?
+  flowPaths     FlowPath[]
+
+  @@unique([chain, suspectAddress, createdAt])
+  @@index([status])
+  @@index([riskBand])
+}
+
+/// Point-in-time snapshot of on-chain address facts (provenance: on_chain).
+model WalletSnapshot {
+  id            String   @id @default(cuid())
+  address       String
+  chain         String
+  balanceWei    String
+  txCount       Int
+  firstSeen     DateTime?
+  lastActivity  DateTime?
+  inVolumeWei   String
+  outVolumeWei  String
+  counterparties Int
+  /// data source identifier, e.g. "etherscan_v2" or "rpc:<host>"
+  source        String
+  fetchedAt     DateTime @default(now())
+
+  @@unique([address, chain, fetchedAt])
+  @@index([address, chain])
+}
+
+/// Curated entity attribution (provenance: attribution). Every record MUST carry a real,
+/// citable public source; fabricated attribution records are forbidden.
+model AttributionRecord {
+  id           String   @id @default(cuid())
+  address      String
+  chain        String
+  entityName   String
+  /// exchange | broker | processor | bridge | defi | mixer | gambling | unknown_service
+  entityType   String
+  /// HIGH | MEDIUM | LOW | UNKNOWN
+  confidence   String
+  /// citation of the public source this record was verified against
+  source       String
+  lastVerified DateTime
+  notes        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([address, chain])
+  @@index([entityType])
+  @@index([entityName])
+}
+
+/// Output of one risk rule for an investigation (provenance: inference).
+model RiskIndicator {
+  id              String        @id @default(cuid())
+  investigationId String
+  investigation   Investigation @relation(fields: [investigationId], references: [id], onDelete: Cascade)
+  rule            String
+  severity        String // info | low | medium | high
+  score           Int
+  evidence        String
+  transactions    Json // array of transaction hashes backing the indicator
+
+  @@index([investigationId])
+}
+
+/// Serialized graph result (nodes/edges per GraphEngine types).
+model GraphSnapshot {
+  id              String        @id @default(cuid())
+  investigationId String        @unique
+  investigation   Investigation @relation(fields: [investigationId], references: [id], onDelete: Cascade)
+  nodes           Json
+  edges           Json
+  depth           Int
+  generatedAt     DateTime      @default(now())
+}
+
+/// One fund-flow path (ordered hops with tx hashes) from suspect toward an endpoint.
+model FlowPath {
+  id              String        @id @default(cuid())
+  investigationId String
+  investigation   Investigation @relation(fields: [investigationId], references: [id], onDelete: Cascade)
+  hops            Json // ordered [{ from, to, txHash, valueWei, timestamp }]
+  totalValueWei   String
+  endpointType    String? // attributed_entity | unknown | suspect_only
+
+  @@index([investigationId])
+}
