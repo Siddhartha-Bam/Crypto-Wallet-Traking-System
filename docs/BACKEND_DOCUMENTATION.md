@@ -40,10 +40,10 @@ This backend implements a **Real-Time Crypto Fraud Attribution System** designed
 ```mermaid
 flowchart TD
     Client[Investigator UI / curl] -->|HTTPS /api| GW[Express 4 + Helmet + CORS + RateLimit]
-    GW -->|validated| Health[/health/]
-    GW -->|validated| Stats[/stats/]
-    GW -->|validated| Wallet[/wallet/:chain/:address*]
-    GW -->|validated| Inv[/investigations/]
+    GW -->|validated| Health["/api/health"]
+    GW -->|validated| Stats["/api/stats"]
+    GW -->|validated| Wallet["/api/wallet/:chain/:address*"]
+    GW -->|validated| Inv["/api/investigations"]
     
     Health --> DB[(PostgreSQL via Prisma)]
     Stats --> DB
