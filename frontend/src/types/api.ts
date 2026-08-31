@@ -20,7 +20,7 @@ export interface DashboardStats {
   recentInvestigations: RecentInvestigation[]
 }
 
-export type Provenance = 'on_chain' | 'attribution' | 'inference'
+export type Provenance = 'on_chain' | 'attribution' | 'inference' | 'demo'
 
 export interface SourceMeta {
   provenance: Provenance

@@ -5,6 +5,7 @@ const CONFIG: Record<Provenance, { color: string; label: string }> = {
   on_chain: { color: 'green', label: 'ON-CHAIN FACT' },
   attribution: { color: 'purple', label: 'ATTRIBUTION' },
   inference: { color: 'orange', label: 'INFERENCE' },
+  demo: { color: 'purple', label: 'DEMO / SEEDED INTELLIGENCE' },
 }
 
 /** Mandatory provenance marker rendered next to every data surface. */

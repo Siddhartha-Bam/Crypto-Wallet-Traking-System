@@ -79,7 +79,13 @@ export default function EvidenceTable({ chain, address }: { chain: string; addre
       title: 'Amount',
       dataIndex: 'valueWei',
       align: 'right',
-      render: (v: string) => (Number(BigInt(v)) / 1e18).toFixed(6),
+      render: (v: string) => {
+        try {
+          return (Number(BigInt(v)) / 1e18).toFixed(6)
+        } catch {
+          return '—'
+        }
+      },
     },
     { title: 'Block', dataIndex: 'blockNumber', width: 110 },
   ]
