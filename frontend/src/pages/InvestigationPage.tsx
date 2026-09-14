@@ -160,8 +160,8 @@ export default function InvestigationPage() {
             <Form.Item name="mode" label="Investigation mode" style={{ marginBottom: 16 }}>
               <Segmented
                 options={[
-                  { value: 'live', label: 'LIVE — real blockchain data' },
-                  { value: 'demo', label: 'DEMO — seeded intelligence' },
+                  { value: 'live', label: 'LIVE - real blockchain data' },
+                  { value: 'demo', label: 'DEMO - seeded intelligence' },
                 ]}
               />
             </Form.Item>

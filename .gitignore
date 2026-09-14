@@ -17,6 +17,9 @@ logs/
 # Test coverage
 coverage/
 
+# CodeGraph
+.codegraph/
+
 # OS / editor
 .DS_Store
 Thumbs.db

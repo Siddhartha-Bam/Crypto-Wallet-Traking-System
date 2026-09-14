@@ -55,7 +55,7 @@ export default function App() {
             {!collapsed && (
               <Space direction="vertical" size={0}>
                 <Typography.Text strong style={{ lineHeight: 1.2 }}>
-                  FraudTrace
+                Kestrel
                 </Typography.Text>
                 <Typography.Text type="secondary" style={{ fontSize: 11 }}>
                   SIH 26183 · Prototype
@@ -71,7 +71,7 @@ export default function App() {
           />
         </Sider>
         <Layout>
-          <Header
+          {/* <Header
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -92,7 +92,7 @@ export default function App() {
             <Tag color="warning" bordered>
               MVP — evidence-based prototype; not an official I4C product
             </Tag>
-          </Header>
+          </Header> */}
           <Content style={{ margin: 16 }}>
             <Routes>
               <Route path="/" element={<DashboardPage />} />

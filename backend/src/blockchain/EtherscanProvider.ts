@@ -2,7 +2,7 @@ import { env } from '../config/env.js'
 import type { Balance, BlockchainProvider, TokenTransfer, Transaction } from './types.js'
 import { formatUnits } from './units.js'
 import { TtlCache } from '../cache/cache.js'
-import { Throttle } from '../cache/throttle.js'
+import { getSharedThrottle } from '../cache/throttle.js'
 import { AppError } from '../middleware/errors.js'
 import { getChain } from './chains.js'
 import { toChecksumAddress } from './address.js'
@@ -52,7 +52,7 @@ export class EtherscanProvider implements BlockchainProvider {
   private readonly chainId: number
   private readonly symbol: string
   private readonly decimals: number
-  private readonly throttle = new Throttle(env.ETHERSCAN_MIN_INTERVAL_MS)
+  private readonly throttle: ReturnType<typeof getSharedThrottle>
   private readonly balanceCache = new TtlCache<Balance>(15_000)
   private readonly txCache = new TtlCache<Transaction[]>(60_000)
   private readonly tokenCache = new TtlCache<TokenTransfer[]>(60_000)
@@ -67,6 +67,7 @@ export class EtherscanProvider implements BlockchainProvider {
     this.chainId = chain.etherscanChainId
     this.symbol = chain.nativeSymbol
     this.decimals = chain.nativeDecimals
+    this.throttle = getSharedThrottle(this.baseUrl, env.ETHERSCAN_MIN_INTERVAL_MS)
   }
 
   private async request<T>(params: Record<string, string>): Promise<T> {

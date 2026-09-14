@@ -24,3 +24,12 @@ export class Throttle {
     return gate.then(task)
   }
 }
+
+const throttleRegistry = new Map<string, Throttle>()
+
+export function getSharedThrottle(key: string, minIntervalMs: number): Throttle {
+  if (!throttleRegistry.has(key)) {
+    throttleRegistry.set(key, new Throttle(minIntervalMs))
+  }
+  return throttleRegistry.get(key)!
+}
