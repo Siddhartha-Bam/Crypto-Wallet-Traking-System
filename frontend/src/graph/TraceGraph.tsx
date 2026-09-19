@@ -172,7 +172,7 @@ export default function TraceGraph({ nodes, edges, isDemo, onEdgeSelected }: Tra
         }}
       >
         <Background variant={BackgroundVariant.Dots} gap={18} size={1} color="#1f2937" />
-        <Controls showInteractive={false} />
+        <Controls showInteractive={false}/>
       </ReactFlow>
     </div>
   )
